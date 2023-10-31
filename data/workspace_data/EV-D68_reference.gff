@@ -1,0 +1,20 @@
+##gff-version 3
+#!gff-spec-version 1.21
+#!processor NCBI annotwriter
+##sequence-region KT285485-1 1 7333
+##species https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=42789
+KT285485-1	Genbank	region	1	7333	.	+	.	ID=KT285485-1:1..7333;Dbxref=taxon:42789;collection-date=11-Aug-2014;country=China;gb-acronym=EV-D68;gbkey=Src;genome=genomic;isolate=BCH4235A;isolation-source=NPA;mol_type=genomic RNA;nat-host=Homo sapiens
+KT285485-1	Genbank	five_prime_UTR	1	698	.	+	.	ID=id-KT285485-1:1..698;gbkey=5'UTR
+KT285485-1	Genbank	CDS	699	7265	.	+	0	ID=cds-AKT08834.1;Dbxref=NCBI_GP:AKT08834.1;Name=AKT08834.1;gbkey=CDS;product=polyprotein;protein_id=AKT08834.1
+KT285485-1	Genbank	mature_protein_region_of_CDS    699 905 .	+	.	ID=id-AKT08834.1:1..69;Parent=cds-AKT08834.1;gbkey=Prot;product=VP4 protein;protein_id=AKT08834.1
+KT285485-1	Genbank	mature_protein_region_of_CDS	906	1649	.	+	.	id-AKT08834.1:70..317;Parent=cds-AKT08834.1;gbkey=Prot;product=VP2 protein;protein_id=AKT08834.1
+KT285485-1	Genbank	mature_protein_region_of_CDS	1650	2354	.	+	.	ID=id-AKT08834.1:318..552;Parent=cds-AKT08834.1;gbkey=Prot;product=VP3 protein;protein_id=AKT08834.1
+KT285485-1	Genbank	mature_protein_region_of_CDS	2355	3281	.	+	.	ID=id-AKT08834.1:553..861;Parent=cds-AKT08834.1;gbkey=Prot;product=VP1 protein;protein_id=AKT08834.1
+KT285485-1	Genbank	mature_protein_region_of_CDS	3282	3722	.	+	.	ID=id-AKT08834.1:862..1008;Parent=cds-AKT08834.1;gbkey=Prot;product=2A protein;protein_id=AKT08834.1
+KT285485-1	Genbank	mature_protein_region_of_CDS    3723    4019	.	+	.	ID=id-AKT08834.1:1009..1107;Parent=cds-AKT08834.1;gbkey=Prot;product=2B protein;protein_id=AKT08834.1
+KT285485-1	Genbank	mature_protein_region_of_CDS	4020	5009	.	+	.	ID=id-AKT08834.1:1108..1437;Parent=cds-AKT08834.1;gbkey=Prot;product=2C protein;protein_id=AKT08834.1
+KT285485-1	Genbank	mature_protein_region_of_CDS	5010	5276	.	+	.	ID=id-AKT08834.1:1438..1526;Parent=cds-AKT08834.1;gbkey=Prot;product=3A protein;protein_id=AKT08834.1
+KT285485-1	Genbank	mature_protein_region_of_CDS    5277    5342	.	+	.	ID=id-AKT08834.1:1527..1548;Parent=cds-AKT08834.1;gbkey=Prot;product=3B protein;protein_id=AKT08834.1    
+KT285485-1	Genbank	mature_protein_region_of_CDS	5343	5891	.	+	.	ID=id-AKT08834.1:1549..1731;Parent=cds-AKT08834.1;gbkey=Prot;product=3C protein;protein_id=AKT08834.1
+KT285485-1	Genbank	mature_protein_region_of_CDS	5892	7262	.	+	.	ID=id-AKT08834.1:1732..2188;Parent=cds-AKT08834.1;gbkey=Prot;product=3D protein;protein_id=AKT08834.1
+KT285485-1	Genbank	three_prime_UTR	7266	7333	.	+	.	ID=id-KT285485-1:7266..7333;gbkey=3'UTR

@@ -58,7 +58,7 @@ Prior to running any of the workflows, you must set up the terra table and link 
 The reference files can be found in this repository in the ``workspace_data`` directory. Python scripts can be found in the ``scripts`` directory.
 
 | workspace variable name | workflow|  file name | description | 
-|:---------------------------------------|:---------------------------------------|:---------------------------------------|:----------------------------------------------------------------|
+|:---------------------------------------|:---------------------------------------|:---------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------|
 |``adapters_and_contaminants_fa``|``EV-D68_illumina_pe_assembly``|Adapters_plus_PhiX_174.fasta | adapaters sequences and contaiment sequences removed during fastq cleaning and filtering using SeqyClean. Thanks to Erin Young at Utah Public Health Laboratory for providing this file!|
 |``ev-d68_genome_gff``|``EV-D68_illumina_pe_assembly``, ``EV-D68_ont_assembly``|KT285485-1_annotations_20230811.gff|whole genome reference sequence annotation file in gff format (we use NCBI genbank ID KT285485.1 with liftover annotations from NC_038308.1)|
 |``ev-d68_genome_fa``|``EV-D68_illumina_pe_assembly``, ``EV-D68_ont_assembly``|KT285485-1.fasta |EV-D68 whole genome reference sequence in fasta format (we use NCBI genbank ID KT285485.1)|

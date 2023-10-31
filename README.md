@@ -2,7 +2,6 @@
 
 **Disclaimer: Next generation sequencing and bioinformatic and genomic analysis at CDPHE is not CLIA validated at this time. These workflows and their outputs are not to be used for diagnostic purposes and should only be used for public health action and surveillance purposes. CDPHE is not responsible for the incorrect or inappropriate use of these workflows or their results.**
 
-
 In this repository you will find all things related to Enterovirus D68 (EV-D68) bioinformatics and analysis. The general directory stucture is as follows:
 
 ```
@@ -17,8 +16,7 @@ CDPHE_EV-D68
       | ev-d68_concat_assembly_software_illumina.py
       | ev_d68_concat_seq_results.py
 | workspace_data # reference data
-| workflow_diagrams
-      
+| workflow_diagrams      
 ```
 
 # CDPHE_EV-D68 Workflows
@@ -31,7 +29,6 @@ CDPHE_EV-D68
 4. [Results Summary Workflow](#results-summary-workflows)
 5. [EV-D68 Genotyping](#evd68-genotyping-method)
 
-
 ## Overview
 
 The following documentation describes the Colorado Department of Public Health and Environments's workflows for the assembly and analysis of whole genome sequencing data for Enterovirus D68 (EV-D68) on GCP's Terra.bio platform. Workflows are written in WDL and can be imported into a Terra.bio workspace through dockstore.
@@ -40,15 +37,9 @@ Our EV-D68 whole genome reference-based assembly workflows are highly adaptable 
 
 Briefly, using the platform appropriate assembly workflow on Terra.bio (r.g. ``EV-D68_illumina_pe_assembly``), we perform quality control, trimming, and filtering of raw reads, and perform reference-guided whole genome assembly. Following assembly, intermediate and results files are transfered to a user defined google storage bucket. Next, we produce a results summary file for the set of sequences analyzed using the ``EV-D68_seq_results`` workflow. Finally, genotyping is performed using an open source online tool.
 
-
 <br/>
-
 
 ## Getting set up
-<details>
-<summary>click to expand</summary>
-
-<br/>
 
 Prior to running any of the workflows, you must set up the terra table and link reference files and custom python scripts to your workspace data. Below is a table detailing the workspace data you will need to set up.
 
@@ -67,10 +58,6 @@ The reference files can be found in this repository in the ``workspace_data`` di
 |``ev-d68_concat_assembly_software_illumina_py``|``EV-D68_illumina_pe_assembly``|``ev-d68_concat_assembly_software_illumina.py``|see detailed description in the readme file found in ``./python_scripts/`` repo directory|
 |``ev-d68_concat_results_py``|``EV-D68_seq_results``|ev_d68_concat_seq_results.py |see detailed description in the readme file found in ``./python_scripts`` repo directory|
 
-
-</details>
-
-<br/>
 <br/>
 
 ## Reference-Based Assembly workflows
@@ -78,12 +65,7 @@ The following workflows describe the reference based assembly methods for paired
 
 <br/>
 
-
 ### EV-D68_illumina_pe_assembly.wdl
-<details>
-<summary>click to expand</summary>
-
-<br/>
 
 ### Overview
 This workflow was developed for the assembly of Illumina paired-end read data. The workflow accepts "sample" as the root entity type. The workflow will:
@@ -102,7 +84,6 @@ This workflow was developed for the assembly of Illumina paired-end read data. T
 10. Use gsutils to transfer the outputs and results to a user-specified google bucket
 
 ![EV-D68_illumina_pe_assembly.wdl workflow diagram](./docs/workflow_diagrams/EV-D68_illumina_pe_assembly.png "EV-D68_illumina_pe_assembly.wdl workflow diagram")
-
 
 <br/>
 
@@ -177,8 +158,6 @@ This workflow was developed for the assembly of Illumina paired-end read data. T
 <br/>
 
 ### EV-D68_seq_results.wdl
-<details>
-<summary>click to expand</summary>
 
 This workflow should be run following assembly with one of the reference based assembly workflows. The workflow accepts "sample_set" as the root entity type and uses the data table from either assembly workflows. Both assembly workflows (illumina pe and ont) are compatible with this workflow. Breifly the workflow performs the following:
 1. Concaenates sequencing assembly metrics (e.g. percent coverage, assembler version), and sequence metadata (e.g. plate name, sample well location) into a single csv file.
@@ -202,8 +181,6 @@ Below is a summary of the workflow input variables along with the syntax used fo
 |``sample_name``|this.sample{terra_datatable_name}s.sample{terra_datatable_name}_id|
 |``workbook_path_array``|this.sample{terra_datatable_name}s.workbook_path|
 
-
-
 ### Outputs
 This workflow generates several output files which are transfered to the user defined user google bucket as defined by this.sample{terra_datatable_name}s.out_dir. The table below details each output. For more detailed regarding the values in each column for the outputs see either the software readmes or the readme for the specific python script as listed in the description.
 
@@ -212,13 +189,9 @@ This workflow generates several output files which are transfered to the user de
 |``sequencing_results_csv``|``{seq_run}_sequencing_results.csv``|summary of the sequencing metrics for each sequence generated from the ``ev-d68_concat_seq_results.py``|``gs://{user_defined_gcp_bucket}/summary_results/``|
 |``wgs_horizon_report_csv``|``{seq_run}_wgs_horizon_report.csv``|results csv used for parsing results into our LIMS. This file is generated from the ``ev-d68_concat_seq_results.py``|``gs://{user_defined_gcp_bucket}/summary_results/``|
 
-</details>
-
 <br/>
 
 ### EV-D68 Genotyping
-<details>
-<summary>click to expand</summary>
 
 Finally, we use the publicly available Enterovirus Genotyping Tool (available here: https://www.rivm.nl/mpf/typingtool/enterovirus/) for genotyping the consensus genome assemblies.
 

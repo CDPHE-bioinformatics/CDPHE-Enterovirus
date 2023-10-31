@@ -1,0 +1,8 @@
+version: 1.2
+workflows:
+ - name: EV-D68_illumina_pe_assembly
+   subclass: WDL
+   primaryDescriptorPath: /workflows/EV-D68_illumina_pe_assembly.wdl
+ - name: EV-D68_seq_results
+   subclass: WDL
+   primaryDescriptorPath: /workflows/EV-D68_seq_results.wdl

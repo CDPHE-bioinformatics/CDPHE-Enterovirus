@@ -14,7 +14,7 @@ workflow EVD68_seq_results {
         Array[File] assembly_software_file_array
         
         # python scripts
-        File ev-d68_seq_results_py
+        File evd68_seq_results_py
 
     }
 
@@ -29,7 +29,7 @@ workflow EVD68_seq_results {
     call results_table {
       input:
         sample_name = sample_name,
-        ev-d68_seq_results_py = ev-d68_seq_results_py,
+        evd68_seq_results_py = evd68_seq_results_py,
         cov_out = select_all(cov_out),
         percent_cvg_csv = select_all(percent_cvg_csv),
         project_name = project_name,
@@ -56,7 +56,7 @@ task results_table {
 
     input {
       Array[String] sample_name
-      File ev-d68_seq_results_py
+      File evd68_seq_results_py
       Array[File] cov_out
       Array[File] percent_cvg_csv
       String project_name
@@ -66,7 +66,7 @@ task results_table {
     }
 
     command <<<
-    python ~{ev-d68_seq_results_py} \
+    python ~{evd68_seq_results_py} \
         --sample_name_array "~{write_lines(sample_name)}" \
         --cov_out_files "~{write_lines(cov_out)}" \
         --percent_cvg_files "~{write_lines(percent_cvg_csv)}" \

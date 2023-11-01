@@ -503,6 +503,7 @@ task create_software_assembly_file {
 task transfer_outputs {
     input {
         String out_dir
+        File fastqc_raw1_html
         File fastqc_raw2_html
         File fastqc_clean1_html
         File fastqc_clean2_html

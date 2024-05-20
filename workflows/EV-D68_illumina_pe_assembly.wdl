@@ -251,14 +251,14 @@ task fastqc {
 
     String docker = "staphb/fastqc:0.11.9"
 
-    command {
+    command <<<
 
         fastqc --outdir $PWD ${fastq_1} ${fastq_2}
 
         # grab version
         fastqc --version | awk '/FastQC/ {print $2}' | tee VERSION
 
-    }
+    >>>
 
     output <<<
 

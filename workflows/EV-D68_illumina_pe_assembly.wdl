@@ -260,7 +260,7 @@ task fastqc {
 
     >>>
 
-    output <<<
+    output {
 
         File fastqc1_html = "${fastq1_name}_fastqc.html"
         File fastqc2_html = "${fastq2_name}_fastqc.html"
@@ -269,7 +269,7 @@ task fastqc {
             software: "fastqc",
             docker: docker,
             version: read_string("VERSION")
-        >>>
+        }
 
     }
 

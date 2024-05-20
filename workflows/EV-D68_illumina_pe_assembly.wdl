@@ -141,6 +141,7 @@ workflow EVD68_illumina_pe_assembly {
             fastq2_scrubbed = hostile.fastq2_scrubbed,
             fastqc_raw1_html = fastqc_raw.fastqc1_html,
             fastqc_raw1_zip = fastqc_raw.fastqc1_zip,
+            fastqc_raw2_html = fastqc_raw.fastqc2_html,
             fastqc_raw2_zip = fastqc_raw.fastqc2_zip,
             fastqc_clean1_html = fastqc_cleaned.fastqc1_html,
             fastqc_clean1_zip = fastqc_cleaned.fastqc1_zip,
@@ -264,6 +265,8 @@ task fastqc {
 
         File fastqc1_html = "${fastq1_name}_fastqc.html"
         File fastqc2_html = "${fastq2_name}_fastqc.html"
+        File fastqc1_zip = "${fastq1_name}_fastqc.zip"
+        File fastqc2_zip = "${fastq2_name}_fastqc.zip"
 
         VersionInfo fastqc_version_info = object {
             software: "fastqc",

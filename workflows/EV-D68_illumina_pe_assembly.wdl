@@ -140,13 +140,9 @@ workflow EVD68_illumina_pe_assembly {
             fastq1_scrubbed = hostile.fastq1_scrubbed,
             fastq2_scrubbed = hostile.fastq2_scrubbed,
             fastqc_raw1_html = fastqc_raw.fastqc1_html,
-            fastqc_raw1_zip = fastqc_raw.fastqc1_zip,
             fastqc_raw2_html = fastqc_raw.fastqc2_html,
-            fastqc_raw2_zip = fastqc_raw.fastqc2_zip,
             fastqc_clean1_html = fastqc_cleaned.fastqc1_html,
-            fastqc_clean1_zip = fastqc_cleaned.fastqc1_zip,
             fastqc_clean2_html = fastqc_cleaned.fastqc2_html,
-            fastqc_clean2_zip = fastqc_cleaned.fastqc2_zip,
             seqyclean_summary = seqyclean_summary,
             filtered_reads_1 = filtered_reads_1,
             filtered_reads_2 = filtered_reads_2,
@@ -173,13 +169,9 @@ workflow EVD68_illumina_pe_assembly {
         File filtered_reads_2 = seqyclean.cleaned_2
         File seqyclean_summary = seqyclean.seqyclean_summary
         File fastqc_raw1_html = fastqc_raw.fastqc1_html
-        File fastqc_raw1_zip = fastqc_raw.fastqc1_zip
         File fastqc_raw2_html = fastqc_raw.fastqc2_html
-        File fastqc_raw2_zip = fastqc_raw.fastqc2_zip
         File fastqc_clean1_html = fastqc_cleaned.fastqc1_html
-        File fastqc_clean1_zip = fastqc_cleaned.fastqc1_zip
         File fastqc_clean2_html = fastqc_cleaned.fastqc2_html
-        File fastqc_clean2_zip = fastqc_cleaned.fastqc2_zip
         File trimsort_bam = ivar_trim.trimsort_bam
         File trimsort_bamindex = ivar_trim.trimsort_bamindex
         File variants = ivar_var.var_out
@@ -265,8 +257,6 @@ task fastqc {
 
         File fastqc1_html = "${fastq1_name}_fastqc.html"
         File fastqc2_html = "${fastq2_name}_fastqc.html"
-        File fastqc1_zip = "${fastq1_name}_fastqc.zip"
-        File fastqc2_zip = "${fastq2_name}_fastqc.zip"
 
         VersionInfo fastqc_version_info = object {
             software: "fastqc",
@@ -588,13 +578,9 @@ task transfer_outputs {
         File? fastq1_scrubbed
         File? fastq2_scrubbed
         File fastqc_raw1_html
-        File fastqc_raw1_zip
         File fastqc_raw2_html
-        File fastqc_raw2_zip
         File fastqc_clean1_html
-        File fastqc_clean1_zip
         File fastqc_clean2_html
-        File fastqc_clean2_zip
         File seqyclean_summary
         File filtered_reads_1
         File filtered_reads_2
@@ -618,13 +604,9 @@ task transfer_outputs {
         gsutil -m cp ~{fastq1_scrubbed} ~{out_dir_path}/scrubbed_fastq/
         gsutil -m cp ~{fastq2_scrubbed} ~{out_dir_path}/scrubbed_fastq/
         gsutil -m cp ~{fastqc_raw1_html} ~{out_dir_path}/fastqc/
-        gsutil -m cp ~{fastqc_raw1_zip} ~{out_dir_path}/fastqc/
         gsutil -m cp ~{fastqc_raw2_html} ~{out_dir_path}/fastqc/
-        gsutil -m cp ~{fastqc_raw2_zip} ~{out_dir_path}/fastqc/
         gsutil -m cp ~{fastqc_clean1_html} ~{out_dir_path}/fastqc/
-        gsutil -m cp ~{fastqc_clean1_zip} ~{out_dir_path}/fastqc/
         gsutil -m cp ~{fastqc_clean2_html} ~{out_dir_path}/fastqc/
-        gsutil -m cp ~{fastqc_clean2_zip} ~{out_dir_path}/fastqc/
         gsutil -m cp ~{seqyclean_summary} ~{out_dir_path}/seqyclean/
         gsutil -m cp ~{filtered_reads_1} ~{out_dir_path}/seqyclean/
         gsutil -m cp ~{filtered_reads_2} ~{out_dir_path}/seqyclean/

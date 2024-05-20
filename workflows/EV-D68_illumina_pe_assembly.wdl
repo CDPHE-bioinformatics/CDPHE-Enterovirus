@@ -184,7 +184,7 @@ workflow EVD68_illumina_pe_assembly {
         File renamed_consensus = rename_fasta.renamed_consensus
         File percent_cvg_csv = calc_percent_cvg.percent_cvg_csv
         File version_capture_illumina_pe_assembly = task_version_capture.version_capture_file
-        String transfer_date = transfer.transfer_date
+        String transfer_date = transfer_outputs.transfer_date
     }
 }
 

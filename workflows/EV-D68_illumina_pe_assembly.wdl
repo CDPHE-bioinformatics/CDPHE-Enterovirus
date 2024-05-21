@@ -242,7 +242,7 @@ task fastqc {
     String fastq1_name = basename(basename(basename(fastq_1, ".gz"), ".fastq"), ".fq")
     String fastq2_name = basename(basename(basename(fastq_2, ".gz"), ".fastq"), ".fq")
 
-    String docker = "staphb/fastqc:0.11.9"
+    String docker = "staphb/fastqc:0.12.1"
 
     command <<<
 

@@ -3,7 +3,7 @@ workflows:
  - name: EV-D68_illumina_pe_assembly
    subclass: WDL
    primaryDescriptorPath: /workflows/EV-D68_illumina_pe_assembly.wdl
-    - name: EV-D68_illumina_se_assembly
+ - name: EV-D68_illumina_se_assembly
    subclass: WDL
    primaryDescriptorPath: /workflows/EV-D68_illumina_se_assembly.wdl
  - name: EV-D68_seq_results

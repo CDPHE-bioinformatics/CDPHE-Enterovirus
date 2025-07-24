@@ -200,7 +200,7 @@ task seqyclean {
 
     command <<<
 
-        seqyclean -minlen 70 -qual 20 20 -gz -1 ~{fastq_1} -2 ~{fastq_2} -c ~{contam} -o ~{sample_name}_clean
+        seqyclean -minlen 25 -qual 30 30 -gz -1 ~{fastq_1} -2 ~{fastq_2} -c ~{contam} -o ~{sample_name}_clean
 
         # grab seqyclean version
         seqyclean -h | awk '/Version/ {print $2}' | tee VERSION
@@ -387,8 +387,8 @@ task ivar_var {
     command <<<
 
         samtools faidx ~{ref}
-        samtools mpileup -A -aa -d 600000 -B -Q 20 -q 20 -f ~{ref} ~{bam} | \
-        ivar variants -p ~{sample_name}_variants -q 20 -t 0.6 -m 10 -r ~{ref} -g ~{gff}
+        samtools mpileup -A -aa -d 600000 -B -Q 30 -q 30 -f ~{ref} ~{bam} | \
+        ivar variants -p ~{sample_name}_variants -q 30 -t 0.6 -m 10 -r ~{ref} -g ~{gff}
 
     >>>
 
@@ -427,8 +427,8 @@ task ivar_consensus {
         samtools --version | awk '/samtools/ {print $2}' | tee VERSION_samtools
 
         samtools faidx ~{ref}
-        samtools mpileup -A -aa -d 600000 -B -Q 20 -q 20 -f ~{ref} ~{bam} | \
-        ivar consensus -p ~{sample_name}_consensus -q 20 -t 0.6 -m 10
+        samtools mpileup -A -aa -d 600000 -B -Q 30 -q 30 -f ~{ref} ~{bam} | \
+        ivar consensus -p ~{sample_name}_consensus -q 30 -t 0.6 -m 10
 
     >>>
 

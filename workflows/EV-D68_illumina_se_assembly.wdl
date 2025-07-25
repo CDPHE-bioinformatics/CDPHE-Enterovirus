@@ -39,7 +39,7 @@ workflow EVD68_illumina_se_assembly {
         input:
             contam = adapters_and_contaminants,
             sample_name = sample_name,
-            fastq_1 = select_first([hostile.fastq1_scrubbed, fastq_1])
+            fastq_1 = fastq_1
     }
 
     call fastqc as fastqc_raw {

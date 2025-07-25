@@ -194,7 +194,7 @@ task seqyclean {
 
     output {
 
-        File cleaned_1 = "${sample_name}_clean_PE1.fastq.gz"
+        File cleaned_1 = "${sample_name}_clean_SE.fastq.gz"
         File seqyclean_summary = "${sample_name}_clean_SummaryStatistics.tsv"
 
         VersionInfo seqyclean_version_info = object {

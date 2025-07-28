@@ -206,12 +206,12 @@ task seqyclean {
     }
 
     runtime {
-        cpu:    2
-        memory:    "6 GiB"
-        disks:    "local-disk 1 HDD"
-        bootDiskSizeGb:    10
+        cpu:    4
+        memory:    "16 GiB"
+        disks:    "local-disk 100 HDD"
+        bootDiskSizeGb:    100
         preemptible:    0
-        maxRetries:    0
+        maxRetries:    2
         docker:    docker
     }
 }
@@ -248,12 +248,12 @@ task fastqc {
     }
 
     runtime {
-        cpu:    1
-        memory:    "2 GiB"
-        disks:    "local-disk 1 HDD"
-        bootDiskSizeGb:    10
+        cpu:    4
+        memory:    "16 GiB"
+        disks:    "local-disk 100 HDD"
+        bootDiskSizeGb:    100
         preemptible:    0
-        maxRetries:    0
+        maxRetries:    2
         docker:    docker
     }
 }
@@ -304,12 +304,12 @@ task align_reads {
     }
 
     runtime {
-        cpu:    2
-        memory:    "12 GiB"
-        disks:    "local-disk 1 HDD"
-        bootDiskSizeGb:    10
+        cpu:    4
+        memory:    "16 GiB"
+        disks:    "local-disk 100 HDD"
+        bootDiskSizeGb:    100
         preemptible:    0
-        maxRetries:    0
+        maxRetries:    2
         docker:    docker
     }
 }
@@ -342,12 +342,12 @@ task ivar_trim {
     }
 
     runtime {
-        cpu:    2
-        memory:    "8 GiB"
-        disks:    "local-disk 1 HDD"
-        bootDiskSizeGb:    10
+        cpu:    4
+        memory:    "16 GiB"
+        disks:    "local-disk 100 HDD"
+        bootDiskSizeGb:    100
         preemptible:    0
-        maxRetries:    0
+        maxRetries:    2
         docker:    docker
     }
 }
@@ -379,12 +379,12 @@ task ivar_var {
     }
 
     runtime {
-        cpu:    2
-        memory:    "8 GiB"
-        disks:    "local-disk 1 HDD"
-        bootDiskSizeGb:    10
+        cpu:    4
+        memory:    "16 GiB"
+        disks:    "local-disk 100 HDD"
+        bootDiskSizeGb:    100
         preemptible:    0
-        maxRetries:    0
+        maxRetries:    2
         docker:    docker
     }
 }
@@ -431,12 +431,12 @@ task ivar_consensus {
     }
 
     runtime {
-        cpu:    2
-        memory:    "8 GiB"
-        disks:    "local-disk 1 HDD"
-        bootDiskSizeGb:    10
+        cpu:    4
+        memory:    "16 GiB"
+        disks:    "local-disk 100 HDD"
+        bootDiskSizeGb:    100
         preemptible:    0
-        maxRetries:    0
+        maxRetries:    2
         docker:    docker
     }
 }
@@ -482,12 +482,12 @@ task bam_stats {
     }
 
     runtime {
-        cpu:    2
-        memory:    "8 GiB"
-        disks:    "local-disk 1 HDD"
-        bootDiskSizeGb:    10
+        cpu:    4
+        memory:    "16 GiB"
+        disks:    "local-disk 100 HDD"
+        bootDiskSizeGb:    100
         preemptible:    0
-        maxRetries:    0
+        maxRetries:    2
         docker:    docker
     }
 }

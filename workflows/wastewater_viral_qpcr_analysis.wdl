@@ -282,7 +282,7 @@ task bam_stats {
     command <<<
     
         samtools coverage -r ~{qpcr_region} -o ~{sample_name}_coverage.txt ~{bam}
-        samtools coverage --min-depth 10-r ~{qpcr_region} -o ~{sample_name}_coverage_10x.txt ~{bam}
+        samtools coverage --min-depth 10 -r ~{qpcr_region} -o ~{sample_name}_coverage_10x.txt ~{bam}
 
     >>>
 

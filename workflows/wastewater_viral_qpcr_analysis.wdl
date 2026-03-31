@@ -65,7 +65,7 @@ workflow wastewater_viral_qpcr_analysis {
         input:
             sample_name = sample_name,
             primers = primer_bed,
-            bam = align_reads.out_bam
+            bam = align_reads.sorted_bam
     }
 
     call bam_stats {

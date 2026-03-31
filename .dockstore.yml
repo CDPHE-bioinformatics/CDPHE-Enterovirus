@@ -9,3 +9,6 @@ workflows:
  - name: EV-D68_seq_results
    subclass: WDL
    primaryDescriptorPath: /workflows/EV-D68_seq_results.wdl
+ - name: wastewater_viral_qpcr_analysis
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wastewater_viral_qpcr_analysis.wdl

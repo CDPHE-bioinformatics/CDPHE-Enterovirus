@@ -97,7 +97,7 @@ workflow wastewater_viral_qpcr_analysis {
     call version_capture.task_version_capture as task_version_capture {
         input:
             version_array = select_first([version_array_with_hostile, version_array]),
-            workflow_name = "astewater_viral_qpcr_analysis ",
+            workflow_name = "wastewater_viral_qpcr_analysis",
             workflow_version = workflow_version_capture.workflow_version,
             project_name = project_name,
             analysis_date = workflow_version_capture.analysis_date,

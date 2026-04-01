@@ -1,6 +1,7 @@
 version 1.0
 
 # import workflow version capture task
+import "../tasks/version_capture_task.wdl" as version_capture
 import "../tasks/hostile_task.wdl" as hostile_task
 
 workflow wastewater_viral_qpcr_analysis {
@@ -12,27 +13,29 @@ workflow wastewater_viral_qpcr_analysis {
         File    primer_bed
         File    adapters_and_contaminants
         File    ref_genome
-        Boolean    scrub_reads
-        Array[File]?    scrub_genome_index
-        String    project_name
+        Boolean scrub_reads
+        Array[File]? scrub_genome_index
+        String  project_name
         String  qpcr_region
         String out_dir
 
+        # python scripts
+        File    version_capture_py
     }
 
     # secret variables
     String outdirpath = sub(out_dir, "/$", "")
 
     if (scrub_reads) {
-        call hostile_task.hostile as hostile {
-            input:
-                fastq1 = fastq_1,
-                fastq2 = fastq_2,
-                genome_index = select_first([scrub_genome_index]),
-                seq_method = "ILLUMINA"
-        }
-    }
-    
+      call hostile_task.hostile as hostile {
+          input:
+              fastq1 = fastq_1,
+              fastq2 = fastq_2,
+              genome_index = select_first([scrub_genome_index]),
+              seq_method = "ILLUMINA"
+      }
+  }
+
     call seqyclean {
         input:
             contam = adapters_and_contaminants,
@@ -65,7 +68,7 @@ workflow wastewater_viral_qpcr_analysis {
         input:
             sample_name = sample_name,
             primers = primer_bed,
-            bam = align_reads.sorted_bam
+            bam = align_reads.out_bam
     }
 
     call bam_stats {
@@ -74,6 +77,32 @@ workflow wastewater_viral_qpcr_analysis {
             bam = ivar_trim.trimsort_bam,
             bai = ivar_trim.trimsort_bamindex,
             qpcr_region = qpcr_region
+    }
+
+    call version_capture.workflow_version_capture  as workflow_version_capture{
+        input:
+    }
+
+    Array[VersionInfo] version_array = [
+        seqyclean.seqyclean_version_info,
+        fastqc_cleaned.fastqc_version_info,
+        align_reads.bwa_version_info,
+        align_reads.samtools_version_info,
+        bam_stats.samtools_version_info
+    ]
+    if (scrub_reads) {
+        Array[VersionInfo] version_array_with_hostile = flatten([version_array, select_all([hostile.hostile_version_info])])
+    }
+
+    call version_capture.task_version_capture as task_version_capture {
+        input:
+            version_array = select_first([version_array_with_hostile, version_array]),
+            workflow_name = "astewater_viral_qpcr_analysis ",
+            workflow_version = workflow_version_capture.workflow_version,
+            project_name = project_name,
+            analysis_date = workflow_version_capture.analysis_date,
+            version_capture_py = version_capture_py
+
     }
 
     call transfer_outputs {
@@ -87,12 +116,11 @@ workflow wastewater_viral_qpcr_analysis {
             seqyclean_summary = seqyclean_summary,
             filtered_reads_1 = filtered_reads_1,
             filtered_reads_2 = filtered_reads_2,
-            sorted_bam = sorted_bam,
-            sorted_bamindex = sorted_bamindex,
             trimsort_bam = trimsort_bam,
             trimsort_bamindex = trimsort_bamindex,
             cov_out = cov_out,
             cov_out_10x = cov_out_10x,
+            version_capture_illumina_pe_assembly = task_version_capture.version_capture_file,
             out_dir = outdirpath
     }
 
@@ -108,12 +136,11 @@ workflow wastewater_viral_qpcr_analysis {
         File fastqc_raw2_html = fastqc_raw.fastqc2_html
         File fastqc_clean1_html = fastqc_cleaned.fastqc1_html
         File fastqc_clean2_html = fastqc_cleaned.fastqc2_html
-        File sorted_bam = align_reads.sorted_bam
-        File sorted_bamindex = align_reads.sorted_bamindex
         File trimsort_bam = ivar_trim.trimsort_bam
         File trimsort_bamindex = ivar_trim.trimsort_bamindex
         File cov_out = bam_stats.cov_out
         File cov_out_10x = bam_stats.cov_out_10x
+        File version_capture_illumina_pe_assembly = task_version_capture.version_capture_file
         String transfer_date = transfer_outputs.transfer_date
     }
 }
@@ -132,6 +159,9 @@ task seqyclean {
 
         seqyclean -minlen 25 -qual 30 30 -gz -1 ~{fastq_1} -2 ~{fastq_2} -c ~{contam} -o ~{sample_name}_clean
 
+        # grab seqyclean version
+        seqyclean -h | awk '/Version/ {print $2}' | tee VERSION
+
     >>>
 
     output {
@@ -139,6 +169,12 @@ task seqyclean {
         File cleaned_1 = "${sample_name}_clean_PE1.fastq.gz"
         File cleaned_2 = "${sample_name}_clean_PE2.fastq.gz"
         File seqyclean_summary = "${sample_name}_clean_SummaryStatistics.tsv"
+
+        VersionInfo seqyclean_version_info = object {
+            software: "seqyclean",
+            docker: docker,
+            version: read_string("VERSION")
+        }
 
     }
 
@@ -169,12 +205,21 @@ task fastqc {
 
         fastqc --outdir $PWD ~{fastq_1} ~{fastq_2}
 
+        # grab version
+        fastqc --version | awk '/FastQC/ {print $2}' | tee VERSION
+
     >>>
 
     output {
 
         File fastqc1_html = "${fastq1_name}_fastqc.html"
         File fastqc2_html = "${fastq2_name}_fastqc.html"
+
+        VersionInfo fastqc_version_info = object {
+            software: "fastqc",
+            docker: docker,
+            version: read_string("VERSION")
+        }
 
     }
 
@@ -203,6 +248,11 @@ task align_reads {
 
     command <<<
 
+        # echo bwa 0.7.17-r1188 > VERSION
+        # grab version bwa and samtools versions
+        bwa 2>&1 | awk '/Version/{print $2}' | tee VERSION_bwa
+        samtools --version | awk '/samtools/ {print $2}' |tee VERSION_samtools
+
         bwa index -p reference.fasta -a is ~{ref}
         bwa mem -t 2 reference.fasta ~{fastq_1} ~{fastq_2} | \
         samtools sort | \
@@ -213,8 +263,20 @@ task align_reads {
 
     output {
 
-        File sorted_bam = "${sample_name}_aln.sorted.bam"
-        File sorted_bamindex = "${sample_name}_aln.sorted.bam.bai"
+        File out_bam = "${sample_name}_aln.sorted.bam"
+        File out_bamindex = "${sample_name}_aln.sorted.bam.bai"
+
+        VersionInfo bwa_version_info = object {
+            software: "bwa",
+            docker: docker,
+            version: read_string("VERSION_bwa")
+        }
+
+        VersionInfo samtools_version_info = object {
+            software: "samtools",
+            docker: docker,
+            version: read_string("VERSION_samtools")
+        }
 
     }
 
@@ -280,7 +342,10 @@ task bam_stats {
     String docker = "staphb/samtools:1.23"
 
     command <<<
-    
+
+        # grab version
+        samtools --version | awk '/samtools/ {print $2}' | tee VERSION
+
         samtools coverage -r ~{qpcr_region} -o ~{sample_name}_coverage.txt ~{bam}
         samtools coverage --min-depth 10 -r ~{qpcr_region} -o ~{sample_name}_coverage_10x.txt ~{bam}
 
@@ -290,6 +355,12 @@ task bam_stats {
 
         File cov_out  = "${sample_name}_coverage.txt"
         File cov_out_10x  = "${sample_name}_coverage_10x.txt"
+
+        VersionInfo samtools_version_info = object {
+            software: "samtools",
+            docker: docker,
+            version: read_string("VERSION")
+        }
 
     }
 
@@ -316,12 +387,11 @@ task transfer_outputs {
         File seqyclean_summary
         File filtered_reads_1
         File filtered_reads_2
-        File sorted_bam
-        File sorted_bamindex
         File trimsort_bam
         File trimsort_bamindex
         File cov_out
         File cov_out_10x
+        File version_capture_illumina_pe_assembly
     }
 
     String out_dir_path = sub('${out_dir}', "/$", "")
@@ -337,12 +407,11 @@ task transfer_outputs {
         gsutil -m cp ~{seqyclean_summary} ~{out_dir_path}/seqyclean/
         gsutil -m cp ~{filtered_reads_1} ~{out_dir_path}/seqyclean/
         gsutil -m cp ~{filtered_reads_2} ~{out_dir_path}/seqyclean/
-        gsutil -m cp ~{sorted_bam} ~{out_dir_path}/alignments/
-        gsutil -m cp ~{sorted_bamindex} ~{out_dir_path}/alignments/
         gsutil -m cp ~{trimsort_bam} ~{out_dir_path}/alignments/
         gsutil -m cp ~{trimsort_bamindex} ~{out_dir_path}/alignments/
         gsutil -m cp ~{cov_out} ~{out_dir_path}/bam_stats/
         gsutil -m cp ~{cov_out_10x} ~{out_dir_path}/bam_stats/
+        gsutil -m cp ~{version_capture_illumina_pe_assembly} ~{out_dir_path}/summary_results/
 
         transferdate=`date`
         echo $transferdate | tee TRANSFERDATE
